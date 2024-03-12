@@ -91,7 +91,7 @@ const Header = (props) => {
                         variant="h6"
                         onClick={() => history("/")}
                       >
-                        <span class="">Dashboard</span>
+                        <span class="">Discussion</span>
                       </Typography>
 
                       <Typography
@@ -134,7 +134,7 @@ const Header = (props) => {
                 variant="h6"
                 onClick={() => history("/")}
               >
-                <span className="hidden lg:block">Dashboard</span>
+                <span className="hidden lg:block">Discussion</span>
               </Typography>
 
               <Typography
@@ -142,21 +142,21 @@ const Header = (props) => {
                 variant="h6"
                 onClick={() => history("/stocks")}
               >
-                <span className="hidden lg:block">Stocks/cryptos</span>
+                <span className="hidden lg:block">Questions</span>
               </Typography>
               <Typography
                 className={classes.title}
                 variant="h6"
                 onClick={() => history("/income")}
               >
-                <span className="hidden lg:block">Income</span>
+                <span className="hidden lg:block">Contribute</span>
               </Typography>
               <Typography
                 className={classes.title}
                 variant="h6"
                 onClick={() => history("/expenses")}
               >
-                <span className="hidden lg:block">Expenses</span>
+                <span className="hidden lg:block">Leaderboard</span>
               </Typography>
               <Typography
                 className={classes.title}
@@ -165,18 +165,6 @@ const Header = (props) => {
               >
                 <span className="hidden lg:block">Chats</span>
               </Typography>
-
-              <Select
-                variant="outlined"
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={currency}
-                style={{ width: 100, height: 40, marginLeft: 15 }}
-                onChange={(e) => setCurrency(e.target.value)}
-              >
-                <MenuItem className="border-red-500" value={"USD"}>USD</MenuItem>
-                <MenuItem  className=" border-red-500 "value={"INR"}>INR</MenuItem>
-              </Select>
             </Toolbar>
           </Container>
         </AppBar>

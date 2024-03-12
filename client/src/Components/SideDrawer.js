@@ -159,12 +159,12 @@ function SideDrawer() {
             <i className="fas fa-search"></i>
             <Text d={{ base: "none", md: "flex" }} px={4}>
                 <div className="hidden lg:block">
-              Search User</div>
+              Search Puzzles</div>
             </Text>
           </Button>
         </Tooltip>
         <Text fontSize="2xl" fontFamily="Work sans">
-            <div className="hidden lg:block">Budget Buddy</div>
+            <div className="hidden lg:block">BrainTwist</div>
           
         </Text>
         <div>
