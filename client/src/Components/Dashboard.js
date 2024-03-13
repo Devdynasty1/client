@@ -1,172 +1,56 @@
 import React, { useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
-import { CryptoState } from "./CryptoContext";
-import axios from "axios";
-import styled from "styled-components";
-import { useGlobalContext } from "./globalcontext";
-import History from "./History";
-import { InnerLayout } from "./Layouts";
-import { dollar } from "./Icons";
-import Chart from "./Chart";
-import Setting from "./Setting";
 
 const Dashboard = (props) => {
-  const {
-    totalExpenses,
-    incomes,
-    expenses,
-    totalIncome,
-    totalBalance,
-    getIncomes,
-    getExpenses,
-  } = useGlobalContext();
 
-  useEffect(() => {
-    getIncomes();
-    getExpenses();
-  }, []);
-  const { currency,symbol,exchangeRatei,exchangeRateu } = CryptoState();
-  const { isSwitchOn, setIsSwitchOn } = CryptoState();
-
-  const [exchangeRate, setexchangeRate] = useState(1);
-  const [cookies, setCookie, removeCookie] = useCookies(["user"]);
-  const profileImageURL = cookies.pic;
-  console.log(profileImageURL);
-  const navigate = useNavigate();
-
+    const [posts, setPosts] = useState([]);
+    const [newPostText, setNewPostText] = useState('');
+  
+    const handlePostChange = (e) => {
+      setNewPostText(e.target.value);
+    };
+  
+    const handlePostSubmit = (e) => {
+      e.preventDefault();
+      if (newPostText.trim() === '') return;
+      const newPost = {
+        id: Date.now(),
+        text: newPostText.trim(),
+        date: new Date().toLocaleDateString(),
+      };
+      setPosts([...posts, newPost]);
+      setNewPostText('');
+    };
   return (
-    <div className={`${
-      isSwitchOn
-        ? "bg-gradient-to-r from-neutral-400 via-white to-neutral-400"
-        : "bg-gradient-to-r from-gray-700 via-black to-gray-700"
-    }`}>
-      <div className={`text-center rounded-lg ${isSwitchOn?"bg-gray-200 hover:bg-gray-300 text-gray-800":"text-white bg-gray-700 hover:bg-gray-800"} p-2 transition`}>
-        <h2 className="text-xl font-bold">Total Balance</h2>
-        <p className="text-2xl">
-          {symbol} {totalBalance()}
-        </p>
-      </div>
-      <div className="flex flex-row justify-center  items-center">
-        <div className={`text-center m-6 rounded-lg  p-2 ${isSwitchOn?"bg-gray-200 hover:bg-gray-300 text-gray-800":"text-white bg-gray-700 hover:bg-gray-800"} p-2 transition`}>
-          <h2 className="text-xl font-bold">Total Income</h2>
-          <p className="text-2xl">
-            {symbol} {totalIncome()}
-          </p>
-        </div>
-
-        <div className={`text-center m-6 rounded-lg  p-2 ${isSwitchOn?"bg-gray-200 hover:bg-gray-300 text-gray-800":"text-white bg-gray-700 hover:bg-gray-800"} transition`}>
-          <h2 className="text-xl font-bold">Total Expense</h2>
-          <p className="text-2xl">
-            {symbol} {totalExpenses()}
-          </p>
-        </div>
-      </div>
-      <DashboardStyled>
-        <InnerLayout>
-          <h1>All Transactions</h1>
-          <div className="stats-con">
-            <div className={`${isSwitchOn?"bg-gray-300 hover:bg-gray-400 text-gray-800":"text-white bg-gray-700 hover:bg-gray-800"} chart-con`}>
-              <Chart />
-            </div>
-
-            <div className="history-con">
-              <History />
-              <h2 className={`${isSwitchOn?"text-gray-800":"text-white"} salary-title`}>
-                Min <span>Salary</span>Max
-              </h2>
-             { incomes.length>0&&<div className="salary-item">
-              
-                <p>{symbol} {Math.min(...incomes.map((item) => (item.currency=="INR"?item.amount*exchangeRatei:item.amount*exchangeRateu))).toFixed(2)}</p>
-                <p>{symbol} {Math.max(...incomes.map((item) => (item.currency=="INR"?item.amount*exchangeRatei:item.amount*exchangeRateu))).toFixed(2)}</p>
-              </div>}
-             {expenses.length>0 && <h2 className="salary-title">
-                Min <span>Expense</span>Max
-              </h2>}
-             {expenses.length>0 &&<div className="salary-item">
-              <p>{symbol} {Math.min(...expenses.map((item) => (item.currency=="INR"?item.amount*exchangeRatei:item.amount*exchangeRateu))).toFixed(2)}</p>
-                <p>{symbol} {Math.max(...expenses.map((item) => (item.currency=="INR"?item.amount*exchangeRatei:item.amount*exchangeRateu))).toFixed(2)}</p>
-              </div>}
-            </div>
+    <div className="max-w-md mx-auto p-4">
+      <h2 className="text-2xl font-bold mb-4 text-center">Public Forum</h2>
+      <form onSubmit={handlePostSubmit}>
+        <textarea
+          className="w-full p-4 border border-gray-300 rounded mb-4"
+          value={newPostText}
+          onChange={handlePostChange}
+          placeholder="Write your post..."
+          rows={5}
+          required
+        />
+        <br />
+        <button
+          type="submit"
+          className="w-full py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600"
+        >
+          Post
+        </button>
+      </form>
+      <div className="mt-8">
+        {posts.map(post => (
+          <div key={post.id} className="border border-gray-300 rounded p-4 mb-4">
+            <p>{post.text}</p>
+            <p className="text-sm text-gray-600 mt-2">Date: {post.date}</p>
           </div>
-        </InnerLayout>
-      </DashboardStyled>
+        ))}
+      </div>
     </div>
   );
 };
 
-const DashboardStyled = styled.div`
-  .chart-con {
-    height: 400px;
-    margin-bottom: 2rem;
-  }
-
-  .amount-con {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 2rem;
-    margin-top: 2rem;
-
-    .income,
-    .expense,
-    .balance {
-      flex: 1 1 100%;
-      background: #fcf6f9;
-      border: 2px solid #ffffff;
-      box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
-      border-radius: 20px;
-      padding: 1rem;
-      text-align: center;
-      margin-bottom: 1rem;
-
-      p {
-        font-size: 3.5rem;
-        font-weight: 700;
-        color: var(--color-green);
-        opacity: 0.6;
-      }
-
-      &:hover {
-        background: #f0e2e5; /* Change the background color on hover */
-      }
-    }
-
-    .balance {
-      margin-top: 0;
-    }
-  }
-
-  .history-con {
-    h2 {
-      margin: 1rem 0;
-      font-size: 1.5rem;
-      span {
-        font-size: 1.8rem;
-      }
-    }
-
-    .salary-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .salary-item {
-      border: 2px solid #ffffff;
-      box-shadow: 0px 1px 15px rgba(0, 0, 0, 0.06);
-      padding: 1rem;
-      border-radius: 20px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 1rem;
-
-      p {
-        font-weight: 600;
-        font-size: 1.6rem;
-      }
-
-    }
-  }
-`;
 
 export default Dashboard;

@@ -14,20 +14,16 @@ import Alert from "./Components/Alert.js";
 import { useEffect, useState } from "react";
 import Getotp from "./Components/Getotp.js";
 import Stocks from "./Components/Stocks.js";
-import CoinPage from "./Components/Coinpage.js";
 import Header from "./Components/Header.js";
 import Setting from "./Components/Setting.js";
 import Chatpage from "./Components/Chatpage";
 import SideDrawer from "./Components/SideDrawer.js";
-import { useGlobalContext } from "./Components/globalcontext.js";
 import { Switch, Toast, useToast } from "@chakra-ui/react";
-import { CryptoState } from "./Components/CryptoContext.js";
 import Footer from "./Components/Footer.js";
+import { CryptoState } from "./Components/CryptoContext.js";
 
 const App = () => {
-  const { incomes, expenses } = useGlobalContext();
   const { isSwitchOn, setIsSwitchOn } = CryptoState();
-  const { currency,symbol,exchangeRatei,exchangeRateu } = CryptoState();
   const [cookies, setCookie, removeCookie] = useCookies(["user"]);
   console.log(global);
   const toast = useToast();
@@ -43,31 +39,6 @@ const App = () => {
     }, 3000);
   };
 
-  useEffect(() => {
-    const alertInterval = setInterval(() => {
-      expenses.map((exp) => {
-        const currentDate = new Date();
-        const expenseDate = new Date(exp.date);
-        console.log(currentDate);
-        console.log(expenseDate);
-        if (expenseDate >= currentDate) {
-          const description = `Due transaction of ${symbol} ${(exp.currency=="INR"?exp.amount*exchangeRatei:exp.amount*exchangeRateu).toFixed(2)}`;
-          console.log("heelo");
-          toast({
-            title: "Money Pending",
-            description: description,
-            status: "error",
-            duration: 5000,
-            isClosable: true,
-            position: "bottom-left",
-          });
-        }
-      });
-    }, 3600000); // 3600000 milliseconds = 1 hour
-
-    // Clean up the interval when the component unmounts
-    return () => clearInterval(alertInterval);
-  }, []);
 
   const handleSwitchChange = () => {
     setIsSwitchOn(!isSwitchOn);
@@ -108,7 +79,6 @@ const App = () => {
         <Route path="/loading" element={<Loading />} />
         <Route path="/getotp" element={<Getotp showAlert={showAlert} />} />
         <Route path="/stocks" element={<Stocks showAlert={showAlert} />} />
-        <Route path="/coins/:id" element={<CoinPage showAlert={showAlert} />} />
         <Route path="/chats" element={<Chatpage />} />
       </Routes>
       <Footer></Footer>
