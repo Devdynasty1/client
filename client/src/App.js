@@ -21,6 +21,9 @@ import SideDrawer from "./Components/SideDrawer.js";
 import { Switch, Toast, useToast } from "@chakra-ui/react";
 import Footer from "./Components/Footer.js";
 import { CryptoState } from "./Components/CryptoContext.js";
+import Hard from "./Components/Hard.js";
+import Medium from "./Components/Medium.js";
+import Easy from "./Components/Easy.js";
 
 const App = () => {
   const { isSwitchOn, setIsSwitchOn } = CryptoState();
@@ -66,6 +69,9 @@ const App = () => {
         />
         <Route path="/friends" element={<Friends />} />
         <Route path="/income" element={<Income />} />
+        <Route path="/hard" element={<Hard/>} />
+        <Route path="/income" element={<Medium/>} />
+        <Route path="/income" element={<Easy/>} />
         <Route path="/expenses" element={<Expenses />} />
         <Route path="/sidedrawer" element={<SideDrawer />} />
         <Route
